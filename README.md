@@ -3,4 +3,4 @@
 
 ![国际摩尔斯电码](assets/国际摩尔斯电码.svg)
 
-![Morse-code-tree)](assets/Morse-code-tree.svg)
+![Morse-code-tree](assets/Morse-code-tree.svg)
