@@ -1,0 +1,97 @@
+C51 COMPILER V9.01   JUDGE                                                                 10/16/2018 00:43:02 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE JUDGE
+OBJECT MODULE PLACED IN judge.OBJ
+COMPILER INVOKED BY: E:\Programs\Keil\C51\BIN\C51.EXE judge.c LARGE BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<judge.h>
+   2          
+   3          uchar digplay[6] = "\0";
+   4          uchar testindex[6][17] = {0};           //一行存放一个字母，存放满清0
+   5          uchar code morseIndex[27][17] = {
+   6                  "10111000", "111010101000", "11101011101000", "1110101000", "1000",
+   7                  "101011101000", "111011101000", "1010101000", "101000", "1011101110111000",
+   8                  "111010111000", "101110101000", "1110111000", "11101000", "11101110111000",
+   9                  "10111011101000", "1110111010111000", "1011101000", "10101000", "111000",
+  10                  "1010111000", "101010111000", "101110111000", "11101010111000", "1110101110111000",
+  11                  "11101110101000", "0000"
+  12          };      // 10 for dot, 1110 for line
+  13          
+  14          void delay(uint c)
+  15          {
+  16   1              uchar a, b;
+  17   1              for (; c > 0; c--)
+  18   1              {
+  19   2                      for (b = 199; b > 0; b--)
+  20   2                      {
+  21   3                              for (a = 1; a > 0; a--);
+  22   3                      }
+  23   2              }
+  24   1      
+  25   1      }
+  26          void judge()
+  27          {
+  28   1              uint temp, i = 0, j = 0;
+  29   1              delay(500);
+  30   1              do
+  31   1              {
+  32   2                      temp = Read_AD_Data(0xA4);              //读取光敏电阻的AD值
+  33   2                      if (temp > 100)                  //AD值改变，LED为亮
+  34   2                      {
+  35   3                              testindex[i][j++] = '1';
+  36   3                      }
+  37   2      
+  38   2                      if (temp < 50)                   //灯泡不亮
+  39   2                      {
+  40   3                              testindex[i][j++] = '0';
+  41   3                      }
+  42   2                      if (j > 3 && testindex[i][j - 2] == '0' && testindex[i][j - 3] == '0')  // next letter or word
+  43   2                      {
+  44   3                              testindex[i][j] = '\0';
+  45   3                              i++;
+  46   3                              j = 0;
+  47   3                      }
+  48   2                      if (j > 16)     break;  // 灯一直亮，即将溢出
+  49   2                      delay(1000);
+  50   2              } while (i < 6);
+  51   1      }
+  52          
+  53          
+  54          void interpret(uchar str[][17])
+  55          {
+C51 COMPILER V9.01   JUDGE                                                                 10/16/2018 00:43:02 PAGE 2   
+
+  56   1              uchar i, j;
+  57   1              for (j = 0; j < 6; j++)
+  58   1              {
+  59   2                      for (i = 0; i < 27; i++)
+  60   2                      {
+  61   3                              digplay[j] = 'e';       // 若未匹配morseIndex，则最后该位是e(rror)
+  62   3                              if (strcmp(str[j], morseIndex[i]) == 0)
+  63   3                              {
+  64   4                                      if (i < 26)
+  65   4                                              digplay[j] = ((uchar)(i + 65));
+  66   4                                      else
+  67   4                                              digplay[j] = ' ';
+  68   4                                      break;
+  69   4                              }
+  70   3                      }
+  71   2              }
+  72   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    527    ----
+   CONSTANT SIZE    =    459    ----
+   XDATA SIZE       =    108       9
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

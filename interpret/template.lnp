@@ -1,0 +1,6 @@
+"lcd.obj",
+"main.obj",
+"XPT2046.obj",
+"judge.obj" 
+TO "template" 
+RAMSIZE(256) 
