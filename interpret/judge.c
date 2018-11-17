@@ -30,12 +30,12 @@ void judge()
 	do
 	{
 		temp = Read_AD_Data(0xA4);		//读取光敏电阻的AD值
-		if (temp > 100)			 //AD值改变，LED为亮
+		if (temp > 250)			 //AD值改变，LED为亮
 		{
 			testindex[i][j++] = '1';
 		}
 
-		if (temp < 50)			 //灯泡不亮
+		if (temp <= 250)			 //灯泡不亮
 		{
 			testindex[i][j++] = '0';
 		}
